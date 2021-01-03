@@ -9,7 +9,6 @@ import pl.uek.mm.model.Vehicle;
 import pl.uek.mm.util.GeoUtil;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
 @Getter @Setter @NoArgsConstructor
