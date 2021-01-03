@@ -22,41 +22,62 @@ public class AlgorithmService {
 
         ResponseModel model = new ResponseModel();
 
-        createMockResponse(model);
+//	    model.setResultData(createMockResponse());
+	    model.setResultData(createResponse(solution));
 
         model.getResultData().setExecutionTime(Duration.between(executionStart, Instant.now()).toMillis());
         return  model;
     }
 
-    private void createMockResponse(ResponseModel model) {
-        ResultDataModel result = new ResultDataModel();
-        List<List<Path>> paths = new ArrayList<>();
+	private ResultDataModel createResponse(TabuSolution solution) {
+		List<Path> paths = new ArrayList<>();
+		for (Vehicle vehicle : solution.getVehicles()) {
+			Path path = new Path();
+			for (City city : vehicle.getRoute()) {
+				PathCity pathCity = new PathCity();
+				pathCity.setName(city.getName());
+				pathCity.setLatitude(city.getLatitude());
+				pathCity.setLongitude(city.getLongitude());
+				pathCity.setDemand(city.getDemand());
+				path.getPathCities().add(pathCity);
+			}
+			paths.add(path);
+		}
 
-        List<Path> firstPathList = new ArrayList<>();
-        List<Path> secondPathList = new ArrayList<>();
+		ResultDataModel result = new ResultDataModel();
+		result.setCost(solution.getCost());
+		result.setPaths(paths);
+		return result;
+	}
+
+	private ResultDataModel createMockResponse() {
+        ResultDataModel result = new ResultDataModel();
+        List<Path> paths = new ArrayList<>();
 
         Path cracowPath = new Path();
-        cracowPath.setLatitude(19.11);
-        cracowPath.setLongitude(15.11);
-        cracowPath.setName("Cracow");
-
-        firstPathList.add(cracowPath);
-        secondPathList.add(cracowPath);
-
         Path brzeskoPath = new Path();
-        brzeskoPath.setName("Brzesko");
-        brzeskoPath.setLatitude(19.11);
-        brzeskoPath.setLongitude(15.11);
 
-        firstPathList.add(brzeskoPath);
-        secondPathList.add(brzeskoPath);
+        PathCity cracow = new PathCity();
+		cracow.setLatitude(19.11);
+		cracow.setLongitude(15.11);
+		cracow.setName("Cracow");
 
-        paths.add(firstPathList);
-        paths.add(secondPathList);
+		PathCity brzesko = new PathCity();
+		brzesko.setName("Brzesko");
+		brzesko.setLatitude(19.11);
+		brzesko.setLongitude(15.11);
+
+		cracowPath.getPathCities().add(cracow);
+		cracowPath.getPathCities().add(brzesko);
+		brzeskoPath.getPathCities().add(cracow);
+		brzeskoPath.getPathCities().add(brzesko);
+
+        paths.add(cracowPath);
+        paths.add(brzeskoPath);
 
         result.setPaths(paths);
 
-        model.setResultData(result);
+       return result;
     }
 
 	private InputDataModel createMockInput() {

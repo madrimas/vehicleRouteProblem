@@ -4,12 +4,12 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.ArrayList;
-import java.util.List;
-
 @Getter @Setter @NoArgsConstructor
-public class Path {
+public class PathCity {
 
-	List<PathCity> pathCities = new ArrayList<>();
+	private String name;
+	private double latitude;
+	private double longitude;
+	private int demand;
 
 }

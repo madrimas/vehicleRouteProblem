@@ -9,7 +9,8 @@ import java.util.List;
 @Getter @Setter @NoArgsConstructor
 public class ResultDataModel {
 
-    private List<List<Path>> paths;
+    private List<Path> paths;
+    private double cost;
     private long executionTime;
 
 }
