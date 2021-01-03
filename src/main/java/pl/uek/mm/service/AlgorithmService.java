@@ -15,8 +15,8 @@ public class AlgorithmService {
     public ResponseModel doCalculations(InputDataModel inputData) {
         Instant executionStart = Instant.now();
 
-	    inputData = createMockInput();
-	    TabuSolution solution = new TabuSolution(inputData);
+//	    TabuSolution solution = new TabuSolution(createMockInput());
+	    TabuSolution solution = new TabuSolution(prepareInput(inputData));
 	    solution.initSolution();
 	    solution.executeTabuSearch();
 
@@ -28,6 +28,16 @@ public class AlgorithmService {
         model.getResultData().setExecutionTime(Duration.between(executionStart, Instant.now()).toMillis());
         return  model;
     }
+
+	private InputDataModel prepareInput(InputDataModel inputData) {
+		int idCounter = 0;
+		for (City city : inputData.getCities()) {
+			city.setId(idCounter);
+			idCounter++;
+		}
+
+		return inputData;
+	}
 
 	private ResultDataModel createResponse(TabuSolution solution) {
 		List<Path> paths = new ArrayList<>();
