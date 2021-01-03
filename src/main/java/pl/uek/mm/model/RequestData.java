@@ -1,21 +1,14 @@
 package pl.uek.mm.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+@Getter @Setter @NoArgsConstructor
 public class RequestData {
 
     @JsonProperty("request")
     private InputDataModel inputData;
-
-    public RequestData() {
-    }
-
-    public InputDataModel getInputData() {
-        return inputData;
-    }
-
-    public void setInputData(InputDataModel inputData) {
-        this.inputData = inputData;
-    }
 
 }

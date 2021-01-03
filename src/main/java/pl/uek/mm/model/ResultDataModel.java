@@ -1,29 +1,15 @@
 package pl.uek.mm.model;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 import java.util.List;
 
+@Getter @Setter @NoArgsConstructor
 public class ResultDataModel {
 
     private List<List<Path>> paths;
     private long executionTime;
-
-    public ResultDataModel() {
-    }
-
-    public List<List<Path>> getPaths() {
-        return paths;
-    }
-
-    public void setPaths(List<List<Path>> paths) {
-        this.paths = paths;
-    }
-
-    public double getExecutionTime() {
-        return executionTime;
-    }
-
-    public void setExecutionTime(long executionTime) {
-        this.executionTime = executionTime;
-    }
 
 }
