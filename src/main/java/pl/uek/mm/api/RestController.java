@@ -19,6 +19,7 @@ public class RestController {
     private AlgorithmService algoService;
 
     @PostMapping(path = "/data")
+    @CrossOrigin
     @ResponseBody
     public ResponseModel calculate(@RequestBody RequestData request) throws Exception {
         return algoService.doCalculations(request);
