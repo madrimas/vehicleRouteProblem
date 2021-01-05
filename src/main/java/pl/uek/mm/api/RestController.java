@@ -19,8 +19,8 @@ public class RestController {
 
     @PostMapping(path = "/data")
     @ResponseBody
-    public ResponseModel calculate(@RequestBody RequestData data) {
-        return algoService.doCalculations(data.getInputData());
+    public ResponseModel calculate(@RequestBody RequestData request) {
+        return algoService.doCalculations(request);
     }
 
 }

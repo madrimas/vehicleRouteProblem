@@ -12,11 +12,14 @@ import java.util.List;
 @Service
 public class AlgorithmService {
 
-    public ResponseModel doCalculations(InputDataModel inputData) {
+    public ResponseModel doCalculations(RequestData request) {
         Instant executionStart = Instant.now();
 
 //	    TabuSolution solution = new TabuSolution(createMockInput());
-	    TabuSolution solution = new TabuSolution(prepareInput(inputData));
+	    TabuSolution solution = new TabuSolution(
+	    		prepareInputParameters(request.getInputParameters()),
+			    prepareInputData(request.getInputData())
+	    );
 	    solution.initSolution();
 	    solution.executeTabuSearch();
 
@@ -29,7 +32,25 @@ public class AlgorithmService {
         return  model;
     }
 
-	private InputDataModel prepareInput(InputDataModel inputData) {
+	private InputParametersModel prepareInputParameters(InputParametersModel inputParameters) {
+		InputParametersModel parameters = new InputParametersModel();
+
+		Integer tabuDelay = inputParameters.getTabuDelay();
+		parameters.setTabuDelay(tabuDelay != null ? tabuDelay : 10);
+
+		Integer tabuRandomBound = inputParameters.getTabuRandomBound();
+		parameters.setTabuRandomBound(tabuRandomBound != null ? tabuRandomBound : 1);
+
+		Integer maxIterations = inputParameters.getMaxIterations();
+		parameters.setMaxIterations(maxIterations != null ? maxIterations : 10000);
+
+		Integer maxIterationsWithoutImprovement = inputParameters.getMaxIterationsWithoutImprovement();
+		parameters.setMaxIterationsWithoutImprovement(maxIterationsWithoutImprovement != null ? maxIterationsWithoutImprovement : 100000);
+
+		return parameters;
+	}
+
+	private InputDataModel prepareInputData(InputDataModel inputData) {
 		int idCounter = 0;
 		for (City city : inputData.getCities()) {
 			city.setId(idCounter);

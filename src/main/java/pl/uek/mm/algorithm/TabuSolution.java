@@ -5,6 +5,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import pl.uek.mm.model.City;
 import pl.uek.mm.model.InputDataModel;
+import pl.uek.mm.model.InputParametersModel;
 import pl.uek.mm.model.Vehicle;
 import pl.uek.mm.util.GeoUtil;
 
@@ -14,9 +15,10 @@ import java.util.List;
 @Getter @Setter @NoArgsConstructor
 public class TabuSolution {
 
-	public static final int TABU_DELAY = 10;
-	public static final int TABU_RANDOM_BOUND = 1;
-	public static final int MAX_ITERATIONS = 20000;
+	private int tabuDelay;
+	private int tabuRandomBound;
+	private int maxIterations;
+	private int maxIterationsWithoutImprovement;
 
 	private int vehiclesAmount;
 	private int customersAmount;
@@ -39,7 +41,12 @@ public class TabuSolution {
 	private int swapRouteFrom = -1;
 	private int swapRouteTo = -1;
 
-	public TabuSolution(InputDataModel input) {
+	public TabuSolution(InputParametersModel parameters, InputDataModel input) {
+		tabuDelay = parameters.getTabuDelay();
+		tabuRandomBound = parameters.getTabuRandomBound();
+		maxIterations = parameters.getMaxIterations();
+		maxIterationsWithoutImprovement = parameters.getMaxIterationsWithoutImprovement();
+
 		this.vehiclesAmount = input.getNoOfCars();
 		this.customersAmount = input.getNoOfCities();
 		this.vehicleCapacity = input.getCarCapacity();
@@ -125,8 +132,9 @@ public class TabuSolution {
 
 	public void executeTabuSearch() {
 		bestSolutionCost = cost;
+		int iterationsWithoutImprovementCounter = 0;
 
-		for (int iteration = 0; iteration < MAX_ITERATIONS; iteration++) {
+		for (int iteration = 0; iteration < maxIterations; iteration++) {
 			List<City> routeFrom;
 			List<City> routeTo;
 			bestNeighbourCost = (float) Double.MAX_VALUE;
@@ -176,6 +184,13 @@ public class TabuSolution {
 			cost += bestNeighbourCost;
 			if (cost < bestSolutionCost) {
 				saveBestSolution();
+				iterationsWithoutImprovementCounter = 0;
+			} else {
+				iterationsWithoutImprovementCounter++;
+			}
+
+			if (iterationsWithoutImprovementCounter >= maxIterationsWithoutImprovement) {
+				break;
 			}
 		}
 
@@ -238,9 +253,9 @@ public class TabuSolution {
 		int newNextCityId = routeTo.get(swapIndexTo + 1).getId();
 
 		int swapCityId = swapCity.getId();
-		tabuMatrix[cityBeforeId][swapCityId] = TABU_DELAY + (int) (Math.random() * TABU_RANDOM_BOUND);
-		tabuMatrix[swapCityId][cityAfterId] = TABU_DELAY + (int) (Math.random() * TABU_RANDOM_BOUND);
-		tabuMatrix[newCityId][newNextCityId] = TABU_DELAY + (int) (Math.random() * TABU_RANDOM_BOUND);
+		tabuMatrix[cityBeforeId][swapCityId] = tabuDelay + (int) (Math.random() * tabuRandomBound);
+		tabuMatrix[swapCityId][cityAfterId] = tabuDelay + (int) (Math.random() * tabuRandomBound);
+		tabuMatrix[newCityId][newNextCityId] = tabuDelay + (int) (Math.random() * tabuRandomBound);
 	}
 
 	private void addNewRoute(List<City> routeTo, City swapCity) {

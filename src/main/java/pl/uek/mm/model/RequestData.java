@@ -8,7 +8,10 @@ import lombok.Setter;
 @Getter @Setter @NoArgsConstructor
 public class RequestData {
 
-    @JsonProperty("request")
+	@JsonProperty("parameters")
+	private InputParametersModel inputParameters;
+
+    @JsonProperty("data")
     private InputDataModel inputData;
 
 }
