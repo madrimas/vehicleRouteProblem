@@ -95,7 +95,7 @@ public class TabuSolution {
 		}
 	}
 
-	public void initSolution() {
+	public void initSolution() throws Exception {
 		int availableVehicleIndex = 0;
 		for (int i = 1; i <= customersAmount; i++) {
 			City city = cities.get(i);
@@ -103,8 +103,8 @@ public class TabuSolution {
 			Vehicle currentVehicle = vehicles.get(availableVehicleIndex);
 
 			if (!currentVehicle.checkIfFits(currentCityDemand)){
-				if (availableVehicleIndex >= vehicleCapacity) {
-					//TODO Tomek exception
+				if (availableVehicleIndex >= (vehiclesAmount - 1)) {
+					throw new Exception("Not enough vehicles");
 				}
 
 				availableVehicleIndex += 1;

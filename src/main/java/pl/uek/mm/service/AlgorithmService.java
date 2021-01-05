@@ -12,7 +12,7 @@ import java.util.List;
 @Service
 public class AlgorithmService {
 
-    public ResponseModel doCalculations(RequestData request) {
+    public ResponseModel doCalculations(RequestData request) throws Exception {
         Instant executionStart = Instant.now();
 
 //	    TabuSolution solution = new TabuSolution(createMockInput());
