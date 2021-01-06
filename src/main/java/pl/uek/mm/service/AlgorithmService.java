@@ -42,10 +42,10 @@ public class AlgorithmService {
 		parameters.setTabuRandomBound(tabuRandomBound != null ? tabuRandomBound : 1);
 
 		Integer maxIterations = inputParameters.getMaxIterations();
-		parameters.setMaxIterations(maxIterations != null ? maxIterations : 10000);
+		parameters.setMaxIterations(maxIterations != null ? maxIterations : 100000);
 
 		Integer maxIterationsWithoutImprovement = inputParameters.getMaxIterationsWithoutImprovement();
-		parameters.setMaxIterationsWithoutImprovement(maxIterationsWithoutImprovement != null ? maxIterationsWithoutImprovement : 100000);
+		parameters.setMaxIterationsWithoutImprovement(maxIterationsWithoutImprovement != null ? maxIterationsWithoutImprovement : 10000);
 
 		return parameters;
 	}
