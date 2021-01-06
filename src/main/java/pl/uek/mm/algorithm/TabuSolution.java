@@ -139,47 +139,15 @@ public class TabuSolution {
 			List<City> routeTo;
 			bestNeighbourCost = (float) Double.MAX_VALUE;
 
-			for (int vehicleFromIndex = 0; vehicleFromIndex < vehicles.size(); vehicleFromIndex++) {
-				routeFrom = vehicles.get(vehicleFromIndex).getRoute();
-				for (int routeFromIndex = 1; routeFromIndex < (routeFrom.size() - 1); routeFromIndex++) {
-					for (int vehicleToIndex = 0; vehicleToIndex < vehicles.size(); vehicleToIndex++) {
-						routeTo = vehicles.get(vehicleToIndex).getRoute();
-						for (int routeToIndex = 0; routeToIndex < (routeTo.size() - 1); routeToIndex++) {
-
-							if (isTabuMove(routeFrom, routeTo, routeFromIndex, routeToIndex)) {
-								break;
-							}
-
-							int movingDemand = routeFrom.get(routeFromIndex).getDemand();
-							if (isChangingRouteAvailable(vehicleFromIndex, vehicleToIndex, movingDemand)
-									&& isCostChange(vehicleFromIndex, vehicleToIndex, routeFromIndex, routeToIndex)) {
-								double neighbourCost = calculateNeighbourCost(routeFrom, routeTo, routeFromIndex, routeToIndex);
-								if (neighbourCost < bestNeighbourCost) {
-									changeRoute(neighbourCost, vehicleFromIndex, vehicleToIndex, routeFromIndex, routeToIndex);
-								}
-							}
-						}
-					}
-				}
-			}
-
-			decreaseTabu();
+			findBestNeighbour();
 
 			routeFrom = vehicles.get(swapRouteFrom).getRoute();
 			routeTo = vehicles.get(swapRouteTo).getRoute();
-			vehicles.get(swapRouteFrom).setRoute(null);
-			vehicles.get(swapRouteTo).setRoute(null);
-
 			City swapCity = routeFrom.get(swapIndexFrom);
 
+			decreaseTabu();
 			addTabu(routeFrom, routeTo, swapCity);
-
-			routeFrom.remove(swapIndexFrom);
-
-			addNewRoute(routeTo, swapCity);
-
-			vehicles.get(swapRouteFrom).setRoute(routeFrom);
-			vehicles.get(swapRouteTo).setRoute(routeTo);
+			changeRoute(routeFrom, routeTo, swapCity);
 
 			cost += bestNeighbourCost;
 			if (cost < bestSolutionCost) {
@@ -196,6 +164,34 @@ public class TabuSolution {
 
 		vehicles = vehiclesForBestSolution;
 		cost = Math.round(bestSolutionCost * 100.0) / 100.0;
+	}
+
+	private void findBestNeighbour() {
+		List<City> routeFrom;
+		List<City> routeTo;
+		for (int vehicleFromIndex = 0; vehicleFromIndex < vehicles.size(); vehicleFromIndex++) {
+			routeFrom = vehicles.get(vehicleFromIndex).getRoute();
+			for (int routeFromIndex = 1; routeFromIndex < (routeFrom.size() - 1); routeFromIndex++) {
+				for (int vehicleToIndex = 0; vehicleToIndex < vehicles.size(); vehicleToIndex++) {
+					routeTo = vehicles.get(vehicleToIndex).getRoute();
+					for (int routeToIndex = 0; routeToIndex < (routeTo.size() - 1); routeToIndex++) {
+
+						if (isTabuMove(routeFrom, routeTo, routeFromIndex, routeToIndex)) {
+							break;
+						}
+
+						int movingDemand = routeFrom.get(routeFromIndex).getDemand();
+						if (isChangingRouteAvailable(vehicleFromIndex, vehicleToIndex, movingDemand)
+								&& isCostChange(vehicleFromIndex, vehicleToIndex, routeFromIndex, routeToIndex)) {
+							double neighbourCost = calculateNeighbourCost(routeFrom, routeTo, routeFromIndex, routeToIndex);
+							if (neighbourCost < bestNeighbourCost) {
+								changeBestNeighbour(neighbourCost, vehicleFromIndex, vehicleToIndex, routeFromIndex, routeToIndex);
+							}
+						}
+					}
+				}
+			}
+		}
 	}
 
 	private boolean isTabuMove(List<City> routeFrom, List<City> routeTo, int routeFromIndex, int routeToIndex) {
@@ -228,7 +224,7 @@ public class TabuSolution {
 		return newCost1 + newCost2 + newCost3 - oldCost1 - oldCost2 - oldCost3;
 	}
 
-	private void changeRoute(double neighbourCost, int vehicleFromIndex, int vehicleToIndex, int routeFromIndex, int routeToIndex) {
+	private void changeBestNeighbour(double neighbourCost, int vehicleFromIndex, int vehicleToIndex, int routeFromIndex, int routeToIndex) {
 		bestNeighbourCost = neighbourCost;
 		swapRouteFrom = vehicleFromIndex;
 		swapRouteTo = vehicleToIndex;
@@ -256,6 +252,13 @@ public class TabuSolution {
 		tabuMatrix[cityBeforeId][swapCityId] = tabuDelay + (int) (Math.random() * tabuRandomBound);
 		tabuMatrix[swapCityId][cityAfterId] = tabuDelay + (int) (Math.random() * tabuRandomBound);
 		tabuMatrix[newCityId][newNextCityId] = tabuDelay + (int) (Math.random() * tabuRandomBound);
+	}
+
+	private void changeRoute(List<City> routeFrom, List<City> routeTo, City swapCity) {
+		routeFrom.remove(swapIndexFrom);
+		addNewRoute(routeTo, swapCity);
+		vehicles.get(swapRouteFrom).setRoute(routeFrom);
+		vehicles.get(swapRouteTo).setRoute(routeTo);
 	}
 
 	private void addNewRoute(List<City> routeTo, City swapCity) {
