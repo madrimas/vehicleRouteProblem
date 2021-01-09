@@ -96,23 +96,58 @@ public class TabuSolution {
 	}
 
 	public void initSolution() throws Exception {
-		int availableVehicleIndex = 0;
-		for (int i = 1; i <= customersAmount; i++) {
-			City city = cities.get(i);
-			int currentCityDemand = city.getDemand();
-			Vehicle currentVehicle = vehicles.get(availableVehicleIndex);
+//		int availableVehicleIndex = 0;
+//		for (int i = 1; i <= customersAmount; i++) {
+//			City city = cities.get(i);
+//			int currentCityDemand = city.getDemand();
+//			Vehicle currentVehicle = vehicles.get(availableVehicleIndex);
+//
+//			if (!currentVehicle.checkIfFits(currentCityDemand)){
+//				if (availableVehicleIndex >= (vehiclesAmount - 1)) {
+//					throw new Exception("Not enough vehicles");
+//				}
+//
+//				availableVehicleIndex += 1;
+//				currentVehicle = vehicles.get(availableVehicleIndex);
+//			}
+//
+//			currentVehicle.visitCustomer(city);
+//		}
 
-			if (!currentVehicle.checkIfFits(currentCityDemand)){
-				if (availableVehicleIndex >= (vehiclesAmount - 1)) {
-					throw new Exception("Not enough vehicles");
-				}
+		vehicles.get(0).visitCustomer(cities.get(26));
+		vehicles.get(0).visitCustomer(cities.get(16));
+		vehicles.get(0).visitCustomer(cities.get(1));
 
-				availableVehicleIndex += 1;
-				currentVehicle = vehicles.get(availableVehicleIndex);
-			}
+		vehicles.get(1).visitCustomer(cities.get(2));
+		vehicles.get(1).visitCustomer(cities.get(6));
+		vehicles.get(1).visitCustomer(cities.get(28));
+		vehicles.get(1).visitCustomer(cities.get(24));
+		vehicles.get(1).visitCustomer(cities.get(22));
+		vehicles.get(1).visitCustomer(cities.get(17));
+		vehicles.get(1).visitCustomer(cities.get(5));
+		vehicles.get(1).visitCustomer(cities.get(4));
+		vehicles.get(1).visitCustomer(cities.get(14));
+		vehicles.get(1).visitCustomer(cities.get(13));
 
-			currentVehicle.visitCustomer(city);
-		}
+		vehicles.get(2).visitCustomer(cities.get(8));
+		vehicles.get(2).visitCustomer(cities.get(3));
+
+		vehicles.get(3).visitCustomer(cities.get(27));
+		vehicles.get(3).visitCustomer(cities.get(15));
+		vehicles.get(3).visitCustomer(cities.get(29));
+		vehicles.get(3).visitCustomer(cities.get(11));
+		vehicles.get(3).visitCustomer(cities.get(10));
+		vehicles.get(3).visitCustomer(cities.get(20));
+		vehicles.get(3).visitCustomer(cities.get(7));
+		vehicles.get(3).visitCustomer(cities.get(25));
+
+		vehicles.get(4).visitCustomer(cities.get(9));
+		vehicles.get(4).visitCustomer(cities.get(19));
+		vehicles.get(4).visitCustomer(cities.get(18));
+		vehicles.get(4).visitCustomer(cities.get(12));
+		vehicles.get(4).visitCustomer(cities.get(30));
+		vehicles.get(4).visitCustomer(cities.get(21));
+		vehicles.get(4).visitCustomer(cities.get(23));
 
 		City depotCity = cities.get(0);
 		for (Vehicle vehicle : vehicles) {
@@ -162,8 +197,8 @@ public class TabuSolution {
 			}
 		}
 
-		vehicles = vehiclesForBestSolution;
-		cost = Math.round(bestSolutionCost * 100.0) / 100.0;
+//		vehicles = vehiclesForBestSolution;
+//		cost = Math.round(bestSolutionCost * 100.0) / 100.0;
 	}
 
 	private void findBestNeighbour() {
